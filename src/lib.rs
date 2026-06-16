@@ -1,3 +1,4 @@
+use clap::{Arg, Command};
 use std::io::Read;
 use std::str::FromStr;
 use thiserror::Error;
@@ -133,8 +134,40 @@ pub struct OutPoint {
 
 // Simple CLI argument parser
 pub fn parse_cli_args(args: &[String]) -> Result<CliCommand, BitcoinError> {
-    // TODO: Match args to "send" or "balance" commands and parse required arguments
-    todo!()
+    // Match args to "send" or "balance" commands and parse required arguments
+    let cli = Command::new("rust-week-4-challenge")
+        .subcommand_required(true)
+        // .arg_required_else_help(true)
+        .subcommand(
+            Command::new("send")
+                .arg(
+                    Arg::new("amount")
+                        .required(true)
+                        .index(1)
+                        .value_parser(clap::value_parser!(u64)),
+                )
+                .arg(Arg::new("address").required(true).index(2)),
+        )
+        .subcommand(Command::new("balance"));
+
+    // extend args to have an expected fake binary name as first arg
+    let mut fake_full_args = vec!["fake_bin".to_string()];
+    fake_full_args.extend_from_slice(args);
+
+    let matches = cli
+        .try_get_matches_from(fake_full_args)
+        .map_err(|e| BitcoinError::ParseError(e.to_string()))?;
+
+    match matches.subcommand() {
+        Some(("send", sub_m)) => {
+            let amount = *sub_m.get_one::<u64>("amount").unwrap();
+            let address = sub_m.get_one::<String>("address").unwrap().clone();
+
+            Ok(CliCommand::Send { amount, address })
+        }
+        Some(("balance", _)) => Ok(CliCommand::Balance),
+        _ => Err(BitcoinError::ParseError("Unknown command".to_string())),
+    }
 }
 
 pub enum CliCommand {
