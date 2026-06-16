@@ -24,6 +24,7 @@ pub struct Point<T> {
 impl<T> Point<T> {
     pub fn new(x: T, y: T) -> Self {
         // TODO: Implement constructor for Point
+        todo!()
     }
 }
 
@@ -31,6 +32,7 @@ impl<T> Point<T> {
 pub trait BitcoinSerialize {
     fn serialize(&self) -> Vec<u8> {
         // TODO: Implement serialization to bytes
+        todo!()
     }
 }
 
@@ -46,6 +48,7 @@ pub struct LegacyTransaction {
 impl LegacyTransaction {
     pub fn builder() -> LegacyTransactionBuilder {
         // TODO: Return a new builder for constructing a transaction
+        todo!()
     }
 }
 
@@ -60,32 +63,39 @@ pub struct LegacyTransactionBuilder {
 impl Default for LegacyTransactionBuilder {
     fn default() -> Self {
         // TODO: Implement default values
+        todo!()
     }
 }
 
 impl LegacyTransactionBuilder {
     pub fn new() -> Self {
         // TODO: Initialize new builder by calling default
+        todo!()
     }
 
     pub fn version(mut self, version: i32) -> Self {
         // TODO: Set the transaction version
+        todo!()
     }
 
     pub fn add_input(mut self, input: TxInput) -> Self {
         // TODO: Add input to the transaction
+        todo!()
     }
 
     pub fn add_output(mut self, output: TxOutput) -> Self {
         // TODO: Add output to the transaction
+        todo!()
     }
 
     pub fn lock_time(mut self, lock_time: u32) -> Self {
         // TODO: Set lock_time for transaction
+        todo!()
     }
 
     pub fn build(self) -> LegacyTransaction {
         // TODO: Build and return the final LegacyTransaction
+        todo!()
     }
 }
 
@@ -112,6 +122,7 @@ pub struct OutPoint {
 // Simple CLI argument parser
 pub fn parse_cli_args(args: &[String]) -> Result<CliCommand, BitcoinError> {
     // TODO: Match args to "send" or "balance" commands and parse required arguments
+    todo!()
 }
 
 pub enum CliCommand {
@@ -126,6 +137,7 @@ impl TryFrom<&[u8]> for LegacyTransaction {
     fn try_from(data: &[u8]) -> Result<Self, Self::Error> {
         // TODO: Parse binary data into a LegacyTransaction
         // Minimum length is 10 bytes (4 version + 4 inputs count + 4 lock_time)
+        todo!()
     }
 }
 
@@ -133,5 +145,6 @@ impl TryFrom<&[u8]> for LegacyTransaction {
 impl BitcoinSerialize for LegacyTransaction {
     fn serialize(&self) -> Vec<u8> {
         // TODO: Serialize only version and lock_time (simplified)
+        todo!()
     }
 }
