@@ -1,6 +1,5 @@
 use clap::{Arg, Command};
 use std::io::Read;
-use std::str::FromStr;
 use thiserror::Error;
 
 // Custom errors for Bitcoin operations
