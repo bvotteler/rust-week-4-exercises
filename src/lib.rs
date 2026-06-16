@@ -147,9 +147,59 @@ impl TryFrom<&[u8]> for LegacyTransaction {
     type Error = BitcoinError;
 
     fn try_from(data: &[u8]) -> Result<Self, Self::Error> {
-        // TODO: Parse binary data into a LegacyTransaction
+        // Parse binary data into a LegacyTransaction
         // Minimum length is 10 bytes (4 version + 4 inputs count + 4 lock_time)
-        todo!()
+        if data.len() < 16 {
+            return Err(BitcoinError::InvalidTransaction);
+        }
+
+        let mut reader = data;
+        let mut version_bytes = [0u8; 4];
+        let mut input_count_bytes = [0u8; 4];
+        let mut output_count_bytes = [0u8; 4];
+        let mut lock_time_bytes = [0u8; 4];
+
+        reader
+            .read(&mut version_bytes)
+            .map_err(|_| BitcoinError::ParseError(String::from("Failed to parse version")))?;
+
+        reader
+            .read(&mut input_count_bytes)
+            .map_err(|_| BitcoinError::ParseError(String::from("Failed to parse input count")))?;
+
+        reader
+            .read(&mut output_count_bytes)
+            .map_err(|_| BitcoinError::ParseError(String::from("Failed to parse output count")))?;
+
+        reader
+            .read(&mut lock_time_bytes)
+            .map_err(|_| BitcoinError::ParseError(String::from("Failed to parse lock_time")))?;
+
+        let mut builder = LegacyTransaction::builder()
+            .version(i32::from_le_bytes(version_bytes))
+            .lock_time(u32::from_le_bytes(lock_time_bytes));
+
+        // create fake TxInputs for now, test data does not contain real ones
+        for _ in 0..u32::from_le_bytes(input_count_bytes) {
+            builder = builder.add_input(TxInput {
+                previous_output: OutPoint {
+                    txid: [0u8; 32],
+                    vout: 0,
+                },
+                script_sig: Vec::new(),
+                sequence: 0,
+            });
+        }
+
+        // create fake TxOutputs for now, test data does not contain real ones
+        for _ in 0..u32::from_le_bytes(output_count_bytes) {
+            builder = builder.add_output(TxOutput {
+                value: 0,
+                script_pubkey: Vec::new(),
+            });
+        }
+
+        Ok(builder.build())
     }
 }
 
