@@ -1,3 +1,4 @@
+use std::io::Read;
 use std::str::FromStr;
 use thiserror::Error;
 
@@ -30,10 +31,7 @@ impl<T> Point<T> {
 
 // Custom serialization for Bitcoin transaction
 pub trait BitcoinSerialize {
-    fn serialize(&self) -> Vec<u8> {
-        // TODO: Implement serialization to bytes
-        todo!()
-    }
+    fn serialize(&self) -> Vec<u8>;
 }
 
 // Legacy Bitcoin transaction
@@ -47,8 +45,8 @@ pub struct LegacyTransaction {
 
 impl LegacyTransaction {
     pub fn builder() -> LegacyTransactionBuilder {
-        // TODO: Return a new builder for constructing a transaction
-        todo!()
+        // Return a new builder for constructing a transaction
+        LegacyTransactionBuilder::new()
     }
 }
 
@@ -158,7 +156,13 @@ impl TryFrom<&[u8]> for LegacyTransaction {
 // Custom serialization for transaction
 impl BitcoinSerialize for LegacyTransaction {
     fn serialize(&self) -> Vec<u8> {
-        // TODO: Serialize only version and lock_time (simplified)
-        todo!()
+        // Serialize only version and lock_time (simplified)
+        // 1. serialize versioin (little endian)
+        let mut vec = self.version.to_le_bytes().to_vec();
+
+        // 2. serialize lock_time (little endian)
+        vec.extend(self.lock_time.to_le_bytes());
+
+        vec
     }
 }
