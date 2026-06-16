@@ -62,40 +62,54 @@ pub struct LegacyTransactionBuilder {
 
 impl Default for LegacyTransactionBuilder {
     fn default() -> Self {
-        // TODO: Implement default values
-        todo!()
+        // Implement default values
+        LegacyTransactionBuilder {
+            version: 1_i32,
+            inputs: Vec::new(),
+            outputs: Vec::new(),
+            lock_time: 0_u32,
+        }
     }
 }
 
 impl LegacyTransactionBuilder {
     pub fn new() -> Self {
-        // TODO: Initialize new builder by calling default
-        todo!()
+        // Initialize new builder by calling default
+        LegacyTransactionBuilder::default()
     }
 
     pub fn version(mut self, version: i32) -> Self {
-        // TODO: Set the transaction version
-        todo!()
+        // Set the transaction version
+        self.version = version;
+        self
     }
 
     pub fn add_input(mut self, input: TxInput) -> Self {
-        // TODO: Add input to the transaction
-        todo!()
+        // Add input to the transaction
+        self.inputs.push(input);
+        self
     }
 
     pub fn add_output(mut self, output: TxOutput) -> Self {
-        // TODO: Add output to the transaction
-        todo!()
+        // Add output to the transaction
+        self.outputs.push(output);
+        self
     }
 
     pub fn lock_time(mut self, lock_time: u32) -> Self {
-        // TODO: Set lock_time for transaction
-        todo!()
+        // Set lock_time for transaction
+        self.lock_time = lock_time;
+        self
     }
 
     pub fn build(self) -> LegacyTransaction {
-        // TODO: Build and return the final LegacyTransaction
-        todo!()
+        // Build and return the final LegacyTransaction
+        LegacyTransaction {
+            version: self.version,
+            inputs: self.inputs,
+            outputs: self.outputs,
+            lock_time: self.lock_time,
+        }
     }
 }
 
