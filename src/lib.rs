@@ -199,7 +199,12 @@ impl TryFrom<&[u8]> for LegacyTransaction {
             });
         }
 
-        Ok(builder.build())
+        let mut tx = builder.build();
+        // need to shrink to fit vectors or capacity isn't what the test expects
+        tx.inputs.shrink_to_fit();
+        tx.outputs.shrink_to_fit();
+
+        Ok(tx)
     }
 }
 
