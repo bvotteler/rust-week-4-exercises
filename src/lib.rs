@@ -1,22 +1,11 @@
 use clap::{Arg, Command};
 use std::io::Read;
-use thiserror::Error;
+
+pub mod bitcoin_error;
+use crate::bitcoin_error::BitcoinError;
 
 mod compact_size;
 use crate::compact_size::CompactSize;
-
-// Custom errors for Bitcoin operations
-#[derive(Error, Debug)]
-pub enum BitcoinError {
-    #[error("Invalid transaction format")]
-    InvalidTransaction,
-    #[error("Invalid script format")]
-    InvalidScript,
-    #[error("Invalid amount")]
-    InvalidAmount,
-    #[error("Parse error: {0}")]
-    ParseError(String),
-}
 
 // Generic Point struct for Bitcoin addresses or coordinates
 #[derive(Debug, Clone, PartialEq)]

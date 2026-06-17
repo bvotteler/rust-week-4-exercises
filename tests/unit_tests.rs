@@ -1,3 +1,4 @@
+use rust_week_4_exercises::bitcoin_error::BitcoinError;
 use rust_week_4_exercises::*;
 
 #[test]
