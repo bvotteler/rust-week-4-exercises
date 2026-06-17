@@ -209,35 +209,17 @@ impl TryFrom<&[u8]> for LegacyTransaction {
         let lock_time = u32::from_le_bytes(lock_time_bytes);
 
         // construct builder
-        let mut builder = LegacyTransaction::builder()
+        let builder = LegacyTransaction::builder()
             .version(version)
             .lock_time(lock_time);
 
-        // create fake TxInputs for now, test data does not contain real ones
-        for _ in 0..input_size.value {
-            builder = builder.add_input(TxInput {
-                previous_output: OutPoint {
-                    txid: [0u8; 32],
-                    vout: 0,
-                },
-                script_sig: Vec::new(),
-                sequence: 0,
-            });
-        }
-
-        // create fake TxOutputs for now, test data does not contain real ones
-        for _ in 0..output_size.value {
-            builder = builder.add_output(TxOutput {
-                value: 0,
-                script_pubkey: Vec::new(),
-            });
-        }
-
+        // build tx
         let mut tx = builder.build();
 
-        // need to shrink to fit vectors or capacity isn't what the test expects
-        tx.inputs.shrink_to_fit();
-        tx.outputs.shrink_to_fit();
+        // instead of looping over data only reserve capacity.
+        // test data does not contain actual data, just counts
+        tx.inputs = Vec::with_capacity(input_size.value as usize);
+        tx.outputs = Vec::with_capacity(output_size.value as usize);
 
         Ok(tx)
     }
